@@ -8,11 +8,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.0.0",
+    "@supabase/supabase-js": "^2.39.0",
     "@vitejs/plugin-react": "^4.7.0",
+    "mapbox-gl": "^3.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-map-gl": "^8.0.0"
+    "react-map-gl": "^7.1.0"
   },
   "devDependencies": {
     "vite": "^4.0.0"
