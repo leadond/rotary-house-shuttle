@@ -9,6 +9,11 @@ const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN || '';
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+// Set Mapbox access token
+if (mapboxToken) {
+  mapboxgl.accessToken = mapboxToken;
+}
+
 function App() {
   const [vehicles, setVehicles] = useState([]);
   const [error, setError] = useState(null);
