@@ -9,8 +9,7 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
-    include: ['mapbox-gl'],
-    exclude: ['react-map-gl']
+    include: ['mapbox-gl', 'react-map-gl']
   },
   server: {
     port: 3000
