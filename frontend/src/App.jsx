@@ -7,7 +7,10 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder.su
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder-key';
 const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN || '';
 
-const supabase = createClient(supabaseUrl, supabaseKey);
+// Only create Supabase client if we have valid credentials
+const supabase = (supabaseUrl !== 'https://placeholder.supabase.co' && supabaseKey !== 'placeholder-key') 
+  ? createClient(supabaseUrl, supabaseKey)
+  : null;
 
 // Set Mapbox access token
 if (mapboxToken) {
@@ -21,21 +24,24 @@ function App() {
   const [mapContainer, setMapContainer] = useState(null);
 
   useEffect(() => {
-    if (supabaseUrl !== 'https://placeholder.supabase.co') {
+    if (supabase) {
       fetchVehicles();
     }
 
-    const subscription = supabase
-      .channel('public:vehicles')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'vehicles' }, () => {
-        if (supabaseUrl !== 'https://placeholder.supabase.co') {
+    let subscription;
+    if (supabase) {
+      subscription = supabase
+        .channel('public:vehicles')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'vehicles' }, () => {
           fetchVehicles();
-        }
-      })
-      .subscribe();
+        })
+        .subscribe();
+    }
 
     return () => {
-      supabase.removeChannel(subscription);
+      if (subscription) {
+        supabase.removeChannel(subscription);
+      }
     };
   }, []);
 
@@ -77,6 +83,11 @@ function App() {
   }, [map, vehicles]);
 
   async function fetchVehicles() {
+    if (!supabase) {
+      setError('Supabase not configured');
+      return;
+    }
+    
     try {
       const { data, error } = await supabase.from('vehicles').select('*');
       if (error) {
@@ -103,8 +114,14 @@ function App() {
       }}>
         <div style={{ textAlign: 'center', padding: '20px' }}>
           <h2>Rotary House Shuttle</h2>
-          <p>Please configure your Mapbox token to view the map.</p>
-          {error && <p style={{ color: 'red' }}>Database Error: {error}</p>}
+          <p>Please configure your environment variables:</p>
+          <ul style={{ textAlign: 'left', display: 'inline-block' }}>
+            <li>VITE_MAPBOX_TOKEN - Required for map display</li>
+            <li>VITE_SUPABASE_URL - Required for database connection</li>
+            <li>VITE_SUPABASE_ANON_KEY - Required for database authentication</li>
+          </ul>
+          <p>Update your frontend/.env file with the correct values.</p>
+          {error && <p style={{ color: 'red' }}>Error: {error}</p>}
         </div>
       </div>
     );
