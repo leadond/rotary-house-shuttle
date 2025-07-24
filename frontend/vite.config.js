@@ -5,8 +5,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      'mapbox-gl': 'mapbox-gl/dist/mapbox-gl.js',
-      'react-map-gl': 'react-map-gl/dist/es/index.js'
+      'mapbox-gl': 'mapbox-gl/dist/mapbox-gl.js'
     }
   },
   optimizeDeps: {
