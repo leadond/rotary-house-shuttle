@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import './index.css';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder.supabase.co';
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder-key';
@@ -104,24 +105,30 @@ function App() {
 
   if (!mapboxToken) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh',
-        backgroundColor: '#f0f0f0',
-        fontFamily: 'Arial, sans-serif'
-      }}>
-        <div style={{ textAlign: 'center', padding: '20px' }}>
+      <div className="error-container">
+        <div className="error-content">
           <h2>Rotary House Shuttle</h2>
           <p>Please configure your environment variables:</p>
-          <ul style={{ textAlign: 'left', display: 'inline-block' }}>
+          <ul>
             <li>VITE_MAPBOX_TOKEN - Required for map display</li>
             <li>VITE_SUPABASE_URL - Required for database connection</li>
             <li>VITE_SUPABASE_ANON_KEY - Required for database authentication</li>
           </ul>
           <p>Update your frontend/.env file with the correct values.</p>
-          {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+          {error && <div className="error-message">Error: {error}</div>}
+        </div>
+      </div>
+    );
+  }
+
+  if (!supabase) {
+    return (
+      <div className="error-container">
+        <div className="error-content">
+          <h2>Rotary House Shuttle</h2>
+          <p>Supabase configuration is missing or invalid.</p>
+          <p>Please check your VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in frontend/.env</p>
+          {error && <div className="error-message">Error: {error}</div>}
         </div>
       </div>
     );
