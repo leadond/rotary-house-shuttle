@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
-    include: ['react-map-gl']
+    include: ['react-map-gl'],
+    exclude: ['mapbox-gl']
   }
 });
