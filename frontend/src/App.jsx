@@ -3,7 +3,6 @@ import { createClient } from '@supabase/supabase-js';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './index.css';
-import MyComponent from './components/MyComponent'
 import RealTimeComponent from './components/RealTimeComponent'
 import InsertComponent from './components/InsertComponent'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder.supabase.co';
